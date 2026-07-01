@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Log Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+
+<body>
+{% if messages %}
+<div class="message-container">
+    {% for message in messages %}
+        <div class="popup {{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+        <h2>Visitor Log</h2>
+
+        <a class="active" href="/dashboard/">Dashboard</a>
+        <a href="#">Visitors</a>
+        <a href="#">Add Visitor</a>
+        <a href="#">Reports</a>
+        <a href="/logout/">Logout</a>
+    </aside>
+
+    <main class="main-content">
+
+        <div class="topbar">
+            <div>
+                <h1>Dashboard</h1>
+                <p>Welcome, {{ request.user.first_name|default:"Admin" }}</p>
+            </div>
+
+            <div class="user-box">
+                Admin User
+            </div>
+        </div>
+
+        <section class="cards">
+            <div class="card">
+                <p>Total Visitors Today</p>
+                <h2>35</h2>
+            </div>
+
+            <div class="card">
+                <p>Currently Inside</p>
+                <h2>8</h2>
+            </div>
+
+            <div class="card">
+                <p>Total Visitors</p>
+                <h2>128</h2>
+            </div>
+        </section>
+
+        <section class="table-section">
+
+            <div class="table-actions">
+                <input type="text" placeholder="Search visitor...">
+                <button>+ Add Visitor</button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Visitor Name</th>
+                        <th>Purpose</th>
+                        <th>Check-in</th>
+                        <th>Check-out</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Juan Dela Cruz</td>
+                        <td>Meeting</td>
+                        <td>8:00 AM</td>
+                        <td>9:30 AM</td>
+                        <td><span class="status exited">Exited</span></td>
+                        <td>
+                            <button class="edit">Edit</button>
+                            <button class="delete">Delete</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>2</td>
+                        <td>Maria Santos</td>
+                        <td>Interview</td>
+                        <td>9:15 AM</td>
+                        <td>-</td>
+                        <td><span class="status inside">Inside</span></td>
+                        <td>
+                            <button class="edit">Edit</button>
+                            <button class="delete">Delete</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>3</td>
+                        <td>Pedro Reyes</td>
+                        <td>Delivery</td>
+                        <td>10:00 AM</td>
+                        <td>10:20 AM</td>
+                        <td><span class="status exited">Exited</span></td>
+                        <td>
+                            <button class="edit">Edit</button>
+                            <button class="delete">Delete</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>4</td>
+                        <td>Ana Garcia</td>
+                        <td>Consultation</td>
+                        <td>10:30 AM</td>
+                        <td>-</td>
+                        <td><span class="status inside">Inside</span></td>
+                        <td>
+                            <button class="edit">Edit</button>
+                            <button class="delete">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+<script>
+
+setTimeout(function(){
+
+    let popup=document.querySelector(".popup");
+
+    if(popup){
+
+        popup.style.opacity="0";
+
+        setTimeout(function(){
+
+            popup.remove();
+
+        },500);
+
+    }
+
+},3000);
+
+</script>
+</body>
+</html>

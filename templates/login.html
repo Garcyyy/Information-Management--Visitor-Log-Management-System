@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Visitor Log Management System | Login</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+<body>
+{% if messages %}
+    {% for message in messages %}
+        <div class="popup {{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="container">
+
+    <div class="left-panel">
+
+        <h1>Visitor Log Management System</h1>
+
+        <p>
+            Welcome back!
+            Login to access visitor records,
+            monitor visitor activities,
+            and manage your system securely.
+        </p>
+
+    </div>
+
+
+    <div class="right-panel">
+
+        <div class="form-container">
+
+            <h2>Login</h2>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <input
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        required>
+
+                <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        required>
+
+                <button type="submit">
+
+                    Login
+
+                </button>
+
+                <p class="login-link">
+
+                    Don't have an account?
+
+                    <a href="/register/">
+
+                        Register
+
+                    </a>
+
+                </p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+<script>
+setTimeout(function(){
+
+    const popup = document.querySelector(".popup");
+
+    if(popup){
+        popup.style.display = "none";
+    }
+
+},3000);
+</script>
+</body>
+</html>
