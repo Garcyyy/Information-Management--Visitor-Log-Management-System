@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+        <h2>Visitor Log</h2>
+        <a href="/dashboard/">Dashboard</a>
+        <a href="/visitors/">Visitors</a>
+        <a href="/departments/">Departments</a>
+        <a href="/persons/">Persons</a>
+        <a href="/visit-logs/">Visit Logs</a>
+        <a href="/logout/">Logout</a>
+    </aside>
+
+    <main class="main-content">
+
+        <div class="topbar">
+            <div>
+                <h1>{{ title }}</h1>
+                <p>Fill out the required information below.</p>
+            </div>
+        </div>
+
+        <section class="table-section">
+            <form method="POST" class="entity-form">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <button type="submit" class="save-btn">Save</button>
+                <a href="/dashboard/" class="cancel-btn">Cancel</a>
+            </form>
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

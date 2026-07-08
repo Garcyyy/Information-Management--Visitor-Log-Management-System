@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visitors</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+        <h2>Visitor Log</h2>
+        <a href="/dashboard/">Dashboard</a>
+        <a class="active" href="/visitors/">Visitors</a>
+        <a href="/departments/">Departments</a>
+        <a href="/persons/">Persons</a>
+        <a href="/visit-logs/">Visit Logs</a>
+        <a href="/logout/">Logout</a>
+    </aside>
+
+    <main class="main-content">
+
+        <div class="topbar">
+            <div>
+                <h1>Visitors</h1>
+                <p>Manage visitor information.</p>
+            </div>
+
+            <a href="/visitors/add/" class="top-button">+ Add Visitor</a>
+        </div>
+
+        <section class="table-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Contact Number</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for visitor in visitors %}
+                    <tr>
+                        <td>{{ visitor.full_name }}</td>
+                        <td>{{ visitor.contact_number }}</td>
+                        <td>{{ visitor.email }}</td>
+                        <td>{{ visitor.address }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No visitors found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
