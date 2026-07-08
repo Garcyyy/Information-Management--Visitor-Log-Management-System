@@ -287,3 +287,84 @@ tbody tr:hover{
     }
 
 }
+
+
+.top-button {
+    background: #0F4C81;
+    color: white;
+    padding: 14px 22px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.top-button:hover {
+    background: #0b3a63;
+}
+
+
+/* Reusable Form Design */
+
+.entity-form {
+    max-width: 700px;
+}
+
+.entity-form p {
+    margin-bottom: 18px;
+}
+
+.entity-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.entity-form input,
+.entity-form select,
+.entity-form textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #d0d7de;
+    border-radius: 10px;
+    font-size: 16px;
+    outline: none;
+}
+
+.entity-form input:focus,
+.entity-form select:focus,
+.entity-form textarea:focus {
+    border-color: #0F4C81;
+}
+
+
+/* Save and Cancel Buttons */
+
+.save-btn {
+    background: #0F4C81;
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background: #0b3a63;
+}
+
+.cancel-btn {
+    background: #777;
+    color: white;
+    padding: 14px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.cancel-btn:hover {
+    background: #555;
+}
