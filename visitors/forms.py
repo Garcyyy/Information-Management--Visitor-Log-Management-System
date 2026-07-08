@@ -42,3 +42,12 @@ class VisitLogForm(forms.ModelForm):
             "check_out_time",
             "status",
         ]
+
+        widgets = {
+            "purpose": forms.TextInput(attrs={
+                "placeholder": "Example: Meeting, interview, delivery"
+            }),
+            "check_out_time": forms.TimeInput(attrs={
+                "type": "time"
+            }),
+        }

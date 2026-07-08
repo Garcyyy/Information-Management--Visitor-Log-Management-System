@@ -24,6 +24,8 @@ class PersonToVisit(models.Model):
     full_name = models.CharField(max_length=100)
     position = models.CharField(max_length=100)
 
+    # Based on your professor's instruction:
+    # One Person to Visit is connected to one Department
     department = models.OneToOneField(
         Department,
         on_delete=models.CASCADE
@@ -39,21 +41,26 @@ class VisitLog(models.Model):
         ("Exited", "Exited"),
     )
 
+    # The user/staff who created the visitor log
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="visit_logs"
     )
 
+    # The visitor being recorded
     visitor = models.ForeignKey(
         Visitor,
         on_delete=models.CASCADE,
         related_name="visit_logs"
     )
 
-    department = models.OneToOneField(
+    # Changed from OneToOneField to ForeignKey
+    # This allows the same department to be used in many visit logs
+    department = models.ForeignKey(
         Department,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="visit_logs"
     )
 
     purpose = models.CharField(max_length=200)
@@ -68,4 +75,4 @@ class VisitLog(models.Model):
     )
 
     def __str__(self):
-        return f"{self.visitor.full_name} recorded by {self.user.username}"
+        return f"{self.visitor.full_name} - {self.department.department_name}"

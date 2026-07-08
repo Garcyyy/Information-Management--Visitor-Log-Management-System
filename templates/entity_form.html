@@ -1,9 +1,251 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #eef4f8;
+            color: #111;
+        }
+
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: #0F4C81;
+            color: white;
+            padding: 35px 25px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .sidebar h2 {
+            font-size: 28px;
+            margin-bottom: 45px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            font-size: 17px;
+        }
+
+        .sidebar a:hover {
+            background: #226ca8;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            width: calc(100% - 260px);
+            padding: 35px;
+        }
+
+        .page-header {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 40px;
+            margin-bottom: 28px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .page-header small {
+            color: #0F4C81;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .page-header h1 {
+            color: #0F4C81;
+            font-size: 38px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #555;
+            font-size: 16px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 850px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+        }
+
+        .form-title {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #e5eaf0;
+        }
+
+        .form-icon {
+            width: 58px;
+            height: 58px;
+            background: #0F4C81;
+            color: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .form-title h2 {
+            color: #0F4C81;
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .form-title p {
+            color: #666;
+            font-size: 15px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 26px 32px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 9px;
+            font-size: 15px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            height: 52px;
+            padding: 13px 15px;
+            border: 1px solid #cfd8e3;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #f9fbfd;
+            outline: none;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #0F4C81;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(15, 76, 129, 0.12);
+        }
+
+        .field-error {
+            color: #e74c3c;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        .form-actions {
+            margin-top: 38px;
+            padding-top: 25px;
+            border-top: 1px solid #e5eaf0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 14px;
+        }
+
+        .cancel-btn {
+            background: #eef3f8;
+            color: #0F4C81;
+            padding: 15px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .save-btn {
+            background: #0F4C81;
+            color: white;
+            border: none;
+            padding: 15px 32px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background: #0b3a63;
+        }
+
+        .cancel-btn:hover {
+            background: #dce6f0;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .dashboard-layout {
+                flex-direction: column;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+            }
+
+            .save-btn,
+            .cancel-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -12,6 +254,7 @@
 
     <aside class="sidebar">
         <h2>Visitor Log</h2>
+
         <a href="/dashboard/">Dashboard</a>
         <a href="/visitors/">Visitors</a>
         <a href="/departments/">Departments</a>
@@ -22,22 +265,49 @@
 
     <main class="main-content">
 
-        <div class="topbar">
-            <div>
-                <h1>{{ title }}</h1>
-                <p>Fill out the required information below.</p>
-            </div>
+        <div class="page-header">
+            <small>Visitor Log Management System</small>
+            <h1>{{ title }}</h1>
+            <p>Complete the required information below to add a new record.</p>
         </div>
 
-        <section class="table-section">
-            <form method="POST" class="entity-form">
-                {% csrf_token %}
-                {{ form.as_p }}
+        <div class="form-card">
 
-                <button type="submit" class="save-btn">Save</button>
-                <a href="/dashboard/" class="cancel-btn">Cancel</a>
+            <div class="form-title">
+                <div class="form-icon">+</div>
+
+                <div>
+                    <h2>Record Information</h2>
+                    <p>Please provide accurate and complete details.</p>
+                </div>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="form-grid">
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}">
+                                {{ field.label }}
+                            </label>
+
+                            {{ field }}
+
+                            {% for error in field.errors %}
+                                <p class="field-error">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-actions">
+                    <a href="javascript:history.back()" class="cancel-btn">Cancel</a>
+                    <button type="submit" class="save-btn">Save Record</button>
+                </div>
             </form>
-        </section>
+
+        </div>
 
     </main>
 
