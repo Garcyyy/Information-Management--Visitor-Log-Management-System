@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Departments</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+        <h2>Visitor Log</h2>
+        <a href="/dashboard/">Dashboard</a>
+        <a href="/visitors/">Visitors</a>
+        <a class="active" href="/departments/">Departments</a>
+        <a href="/persons/">Persons</a>
+        <a href="/visit-logs/">Visit Logs</a>
+        <a href="/logout/">Logout</a>
+    </aside>
+
+    <main class="main-content">
+
+        <div class="topbar">
+            <div>
+                <h1>Departments</h1>
+                <p>Manage departments or offices.</p>
+            </div>
+
+            <a href="/departments/add/" class="top-button">+ Add Department</a>
+        </div>
+
+        <section class="table-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Department Name</th>
+                        <th>Office Location</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for department in departments %}
+                    <tr>
+                        <td>{{ department.department_name }}</td>
+                        <td>{{ department.office_location }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2">No departments found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
