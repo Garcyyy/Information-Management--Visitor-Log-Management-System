@@ -421,3 +421,21 @@ tbody tr:hover{
 .delete:hover {
     background: #c0392b;
 }
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-buttons form {
+    margin: 0;
+}
+
+.edit,
+.delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 52px;
+    height: 36px;
+}

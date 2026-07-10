@@ -4,9 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Visitor Log Dashboard</title>
-
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 </head>
 
@@ -27,29 +25,12 @@
     <aside class="sidebar">
         <h2>Visitor Log</h2>
 
-        <a href="{% url 'dashboard' %}" class="active">
-            Dashboard
-        </a>
-
-        <a href="{% url 'visitor_list' %}">
-            Visitors
-        </a>
-
-        <a href="{% url 'department_list' %}">
-            Departments
-        </a>
-
-        <a href="{% url 'person_list' %}">
-            Persons
-        </a>
-
-        <a href="{% url 'visitlog_list' %}">
-            Visit Logs
-        </a>
-
-        <a href="{% url 'logout' %}">
-            Logout
-        </a>
+        <a href="{% url 'dashboard' %}" class="active">Dashboard</a>
+        <a href="{% url 'visitor_list' %}">Visitors</a>
+        <a href="{% url 'department_list' %}">Departments</a>
+        <a href="/persons/">Personnel</a>
+        <a href="{% url 'visitlog_list' %}">Visit Logs</a>
+        <a href="{% url 'logout' %}">Logout</a>
     </aside>
 
     <main class="main-content">
@@ -57,11 +38,7 @@
         <div class="topbar">
             <div>
                 <h1>Dashboard</h1>
-
-                <p>
-                    Welcome,
-                    {{ request.user.first_name|default:request.user.username }}
-                </p>
+                <p>Welcome, {{ request.user.first_name|default:request.user.username }}</p>
             </div>
 
             <div class="user-box">
@@ -70,7 +47,6 @@
         </div>
 
         <section class="cards">
-
             <div class="card">
                 <p>Total Visitors Today</p>
                 <h2>{{ total_visitors_today }}</h2>
@@ -85,30 +61,21 @@
                 <p>Total Visitors</p>
                 <h2>{{ total_visitors }}</h2>
             </div>
-
         </section>
 
         <section class="table-section">
 
             <div class="table-actions">
+                <input type="text" id="visitorSearch" placeholder="Search visitor...">
 
-                <input
-                    type="text"
-                    id="visitorSearch"
-                    placeholder="Search visitor..."
-                >
-
-                <a
-                    href="{% url 'add_visitlog' %}?next=dashboard"
-                    class="top-button"
-                >
+                <a href="{% url 'add_visitlog' %}?next=dashboard"
+                   class="top-button"
+                   style="text-decoration: none;">
                     + Add Visit Log
                 </a>
-
             </div>
 
             <table id="visitorTable">
-
                 <thead>
                     <tr>
                         <th>No.</th>
@@ -119,32 +86,22 @@
                         <th>Check-out</th>
                         <th>Status</th>
                         <th>Recorded By</th>
-                        <th>Action</th>
+                        <th style="width: 170px;">Action</th>
                     </tr>
                 </thead>
 
                 <tbody>
-
                     {% for log in logs %}
-
                     <tr>
                         <td>{{ forloop.counter }}</td>
 
-                        <td>
-                            {{ log.visitor.full_name }}
-                        </td>
+                        <td>{{ log.visitor.full_name }}</td>
 
-                        <td>
-                            {{ log.department.department_name }}
-                        </td>
+                        <td>{{ log.department.department_name }}</td>
 
-                        <td>
-                            {{ log.purpose }}
-                        </td>
+                        <td>{{ log.purpose }}</td>
 
-                        <td>
-                            {{ log.check_in_time|time:"g:i A" }}
-                        </td>
+                        <td>{{ log.check_in_time|time:"g:i A" }}</td>
 
                         <td>
                             {% if log.check_out_time %}
@@ -160,54 +117,68 @@
                             </span>
                         </td>
 
-                        <td>
-                            {{ log.user.username }}
-                        </td>
+                        <td>{{ log.user.username }}</td>
 
-                        <td>
-                            <a
-                                href="{% url 'edit_visitlog' log.id %}?next=dashboard"
-                                class="edit"
-                            >
-                                Edit
-                            </a>
+                        <td style="white-space: nowrap; min-width: 170px;">
+                            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: nowrap;">
 
-                            <form
-                                method="POST"
-                                action="{% url 'delete_visitlog' log.id %}"
-                                style="display: inline;"
-                            >
-                                {% csrf_token %}
+                                <a href="{% url 'edit_visitlog' log.id %}?next=dashboard"
+                                   style="
+                                       display: inline-flex;
+                                       align-items: center;
+                                       justify-content: center;
+                                       background: #f7b731;
+                                       color: #111;
+                                       padding: 10px 16px;
+                                       border-radius: 8px;
+                                       text-decoration: none;
+                                       font-weight: 600;
+                                       min-width: 55px;
+                                       height: 38px;
+                                   ">
+                                    Edit
+                                </a>
 
-                                <input
-                                    type="hidden"
-                                    name="next"
-                                    value="dashboard"
-                                >
+                                <form method="POST"
+                                      action="{% url 'delete_visitlog' log.id %}"
+                                      style="display: inline; margin: 0; padding: 0;">
+                                    {% csrf_token %}
 
-                                <button
-                                    type="submit"
-                                    class="delete"
-                                    onclick="return confirm('Delete this visit log?');"
-                                >
-                                    Delete
-                                </button>
-                            </form>
+                                    <input type="hidden" name="next" value="dashboard">
+
+                                    <button type="submit"
+                                            onclick="return confirm('Delete this visit log?');"
+                                            style="
+                                                display: inline-flex;
+                                                align-items: center;
+                                                justify-content: center;
+                                                background: #e74c3c;
+                                                color: white;
+                                                padding: 10px 16px;
+                                                border-radius: 8px;
+                                                text-decoration: none;
+                                                font-weight: 600;
+                                                border: none;
+                                                cursor: pointer;
+                                                min-width: 65px;
+                                                height: 38px;
+                                            ">
+                                        Delete
+                                    </button>
+                                </form>
+
+                            </div>
                         </td>
                     </tr>
 
                     {% empty %}
-
                     <tr>
-                        <td colspan="9">
+                        <td colspan="9" style="text-align: center; padding: 25px;">
                             No visitor logs found. Click “Add Visit Log” to create one.
                         </td>
                     </tr>
-
                     {% endfor %}
-
                 </tbody>
-
             </table>
 
         </section>
@@ -217,7 +188,6 @@
 </div>
 
 <script>
-    // Automatically remove success/error messages
     setTimeout(function () {
         const popups = document.querySelectorAll(".popup");
 
@@ -230,8 +200,6 @@
         });
     }, 3000);
 
-
-    // Search the dashboard table
     const searchInput = document.getElementById("visitorSearch");
     const rows = document.querySelectorAll("#visitorTable tbody tr");
 
@@ -241,9 +209,11 @@
         rows.forEach(function (row) {
             const rowText = row.textContent.toLowerCase();
 
-            row.style.display = rowText.includes(searchText)
-                ? ""
-                : "none";
+            if (rowText.includes(searchText)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
         });
     });
 </script>
