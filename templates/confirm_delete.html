@@ -1,7 +1,8 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>{{ title }}</title>
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 </head>
@@ -12,6 +13,7 @@
 
     <aside class="sidebar">
         <h2>Visitor Log</h2>
+
         <a href="/dashboard/">Dashboard</a>
         <a href="/visitors/">Visitors</a>
         <a href="/departments/">Departments</a>
@@ -25,20 +27,20 @@
         <div class="topbar">
             <div>
                 <h1>{{ title }}</h1>
-                <p>Fill out the required information below.</p>
+                <p>Please confirm if you want to delete this record.</p>
             </div>
         </div>
 
         <section class="table-section">
-            <form method="POST" class="entity-form">
-                {% csrf_token %}
-                {% if next_url %}
-    <input type="hidden" name="next" value="{{ next_url }}">
-{% endif %}
-                {{ form.as_p }}
+            <h2>Are you sure?</h2>
+            <p style="margin-top: 10px; margin-bottom: 25px;">
+                You are about to delete: <strong>{{ object }}</strong>
+            </p>
 
-                <button type="submit" class="save-btn">Save</button>
-                <a href="/dashboard/" class="cancel-btn">Cancel</a>
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="delete">Yes, Delete</button>
+                <a href="{% url cancel_url %}" class="edit">Cancel</a>
             </form>
         </section>
 

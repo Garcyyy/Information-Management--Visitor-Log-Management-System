@@ -8,14 +8,25 @@
 
 <body>
 
+{% if messages %}
+<div class="message-container">
+    {% for message in messages %}
+        <div class="popup {{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 <div class="dashboard-layout">
 
     <aside class="sidebar">
         <h2>Visitor Log</h2>
+
         <a href="/dashboard/">Dashboard</a>
         <a href="/visitors/">Visitors</a>
         <a href="/departments/">Departments</a>
-        <a class="active" href="/persons/">Persons</a>
+        <a href="/persons/" class="active">Persons</a>
         <a href="/visit-logs/">Visit Logs</a>
         <a href="/logout/">Logout</a>
     </aside>
@@ -38,6 +49,7 @@
                         <th>Full Name</th>
                         <th>Position</th>
                         <th>Department</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
 
@@ -47,10 +59,20 @@
                         <td>{{ person.full_name }}</td>
                         <td>{{ person.position }}</td>
                         <td>{{ person.department.department_name }}</td>
+                        <td>
+                            <a href="{% url 'edit_person' person.id %}" class="edit">Edit</a>
+
+                            <form method="POST" action="{% url 'delete_person' person.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="delete" onclick="return confirm('Delete this person?');">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="3">No persons found.</td>
+                        <td colspan="4">No persons found.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -60,6 +82,20 @@
     </main>
 
 </div>
+
+<script>
+    setTimeout(function () {
+        let popups = document.querySelectorAll(".popup");
+
+        popups.forEach(function (popup) {
+            popup.style.opacity = "0";
+
+            setTimeout(function () {
+                popup.remove();
+            }, 500);
+        });
+    }, 3000);
+</script>
 
 </body>
 </html>

@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Visitor Log Dashboard</title>
+
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 </head>
 
@@ -25,12 +27,29 @@
     <aside class="sidebar">
         <h2>Visitor Log</h2>
 
-        <a href="/dashboard/" class="active">Dashboard</a>
-        <a href="/visitors/">Visitors</a>
-        <a href="/departments/">Departments</a>
-        <a href="/persons/">Persons</a>
-        <a href="/visit-logs/">Visit Logs</a>
-        <a href="/logout/">Logout</a>
+        <a href="{% url 'dashboard' %}" class="active">
+            Dashboard
+        </a>
+
+        <a href="{% url 'visitor_list' %}">
+            Visitors
+        </a>
+
+        <a href="{% url 'department_list' %}">
+            Departments
+        </a>
+
+        <a href="{% url 'person_list' %}">
+            Persons
+        </a>
+
+        <a href="{% url 'visitlog_list' %}">
+            Visit Logs
+        </a>
+
+        <a href="{% url 'logout' %}">
+            Logout
+        </a>
     </aside>
 
     <main class="main-content">
@@ -38,107 +57,157 @@
         <div class="topbar">
             <div>
                 <h1>Dashboard</h1>
-                <p>Welcome, {{ request.user.first_name|default:"Admin" }}</p>
+
+                <p>
+                    Welcome,
+                    {{ request.user.first_name|default:request.user.username }}
+                </p>
             </div>
 
             <div class="user-box">
-                Admin User
+                {{ request.user.username }}
             </div>
         </div>
 
         <section class="cards">
+
             <div class="card">
                 <p>Total Visitors Today</p>
-                <h2>35</h2>
+                <h2>{{ total_visitors_today }}</h2>
             </div>
 
             <div class="card">
                 <p>Currently Inside</p>
-                <h2>8</h2>
+                <h2>{{ currently_inside }}</h2>
             </div>
 
             <div class="card">
                 <p>Total Visitors</p>
-                <h2>128</h2>
+                <h2>{{ total_visitors }}</h2>
             </div>
+
         </section>
 
         <section class="table-section">
 
             <div class="table-actions">
-                <input type="text" id="visitorSearch" placeholder="Search visitor...">
 
-                <button type="button" onclick="window.location.href='/visitors/add/'">
-                    + Add Visitor
-                </button>
+                <input
+                    type="text"
+                    id="visitorSearch"
+                    placeholder="Search visitor..."
+                >
+
+                <a
+                    href="{% url 'add_visitlog' %}?next=dashboard"
+                    class="top-button"
+                >
+                    + Add Visit Log
+                </a>
+
             </div>
 
             <table id="visitorTable">
+
                 <thead>
                     <tr>
                         <th>No.</th>
                         <th>Visitor Name</th>
+                        <th>Department</th>
                         <th>Purpose</th>
                         <th>Check-in</th>
                         <th>Check-out</th>
                         <th>Status</th>
+                        <th>Recorded By</th>
                         <th>Action</th>
                     </tr>
                 </thead>
 
                 <tbody>
+
+                    {% for log in logs %}
+
                     <tr>
-                        <td>1</td>
-                        <td>Juan Dela Cruz</td>
-                        <td>Meeting</td>
-                        <td>8:00 AM</td>
-                        <td>9:30 AM</td>
-                        <td><span class="status exited">Exited</span></td>
+                        <td>{{ forloop.counter }}</td>
+
                         <td>
-                            <button class="edit">Edit</button>
-                            <button class="delete">Delete</button>
+                            {{ log.visitor.full_name }}
+                        </td>
+
+                        <td>
+                            {{ log.department.department_name }}
+                        </td>
+
+                        <td>
+                            {{ log.purpose }}
+                        </td>
+
+                        <td>
+                            {{ log.check_in_time|time:"g:i A" }}
+                        </td>
+
+                        <td>
+                            {% if log.check_out_time %}
+                                {{ log.check_out_time|time:"g:i A" }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <span class="status {{ log.status|lower }}">
+                                {{ log.status }}
+                            </span>
+                        </td>
+
+                        <td>
+                            {{ log.user.username }}
+                        </td>
+
+                        <td>
+                            <a
+                                href="{% url 'edit_visitlog' log.id %}?next=dashboard"
+                                class="edit"
+                            >
+                                Edit
+                            </a>
+
+                            <form
+                                method="POST"
+                                action="{% url 'delete_visitlog' log.id %}"
+                                style="display: inline;"
+                            >
+                                {% csrf_token %}
+
+                                <input
+                                    type="hidden"
+                                    name="next"
+                                    value="dashboard"
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="delete"
+                                    onclick="return confirm('Delete this visit log?');"
+                                >
+                                    Delete
+                                </button>
+                            </form>
                         </td>
                     </tr>
 
+                    {% empty %}
+
                     <tr>
-                        <td>2</td>
-                        <td>Maria Santos</td>
-                        <td>Interview</td>
-                        <td>9:15 AM</td>
-                        <td>-</td>
-                        <td><span class="status inside">Inside</span></td>
-                        <td>
-                            <button class="edit">Edit</button>
-                            <button class="delete">Delete</button>
+                        <td colspan="9">
+                            No visitor logs found. Click “Add Visit Log” to create one.
                         </td>
                     </tr>
 
-                    <tr>
-                        <td>3</td>
-                        <td>Pedro Reyes</td>
-                        <td>Delivery</td>
-                        <td>10:00 AM</td>
-                        <td>10:20 AM</td>
-                        <td><span class="status exited">Exited</span></td>
-                        <td>
-                            <button class="edit">Edit</button>
-                            <button class="delete">Delete</button>
-                        </td>
-                    </tr>
+                    {% endfor %}
 
-                    <tr>
-                        <td>4</td>
-                        <td>Ana Garcia</td>
-                        <td>Consultation</td>
-                        <td>10:30 AM</td>
-                        <td>-</td>
-                        <td><span class="status inside">Inside</span></td>
-                        <td>
-                            <button class="edit">Edit</button>
-                            <button class="delete">Delete</button>
-                        </td>
-                    </tr>
                 </tbody>
+
             </table>
 
         </section>
@@ -148,9 +217,9 @@
 </div>
 
 <script>
-    // Auto-hide popup messages
+    // Automatically remove success/error messages
     setTimeout(function () {
-        let popups = document.querySelectorAll(".popup");
+        const popups = document.querySelectorAll(".popup");
 
         popups.forEach(function (popup) {
             popup.style.opacity = "0";
@@ -161,21 +230,20 @@
         });
     }, 3000);
 
-    // Search visitor in dashboard table
+
+    // Search the dashboard table
     const searchInput = document.getElementById("visitorSearch");
-    const tableRows = document.querySelectorAll("#visitorTable tbody tr");
+    const rows = document.querySelectorAll("#visitorTable tbody tr");
 
-    searchInput.addEventListener("keyup", function () {
-        const searchValue = searchInput.value.toLowerCase();
+    searchInput.addEventListener("input", function () {
+        const searchText = searchInput.value.toLowerCase();
 
-        tableRows.forEach(function (row) {
+        rows.forEach(function (row) {
             const rowText = row.textContent.toLowerCase();
 
-            if (rowText.includes(searchValue)) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
+            row.style.display = rowText.includes(searchText)
+                ? ""
+                : "none";
         });
     });
 </script>
