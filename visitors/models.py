@@ -24,9 +24,11 @@ class PersonToVisit(models.Model):
     full_name = models.CharField(max_length=100)
     position = models.CharField(max_length=100)
 
-    department = models.OneToOneField(
+    # ForeignKey allows one department to have many persons
+    department = models.ForeignKey(
         Department,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="persons"
     )
 
     def __str__(self):
@@ -39,21 +41,25 @@ class VisitLog(models.Model):
         ("Exited", "Exited"),
     )
 
+    # Staff/user who recorded the visit log
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="visit_logs"
     )
 
+    # Visitor being recorded
     visitor = models.ForeignKey(
         Visitor,
         on_delete=models.CASCADE,
         related_name="visit_logs"
     )
 
-    department = models.OneToOneField(
+    # ForeignKey allows the same department to be used in many visit logs
+    department = models.ForeignKey(
         Department,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="visit_logs"
     )
 
     purpose = models.CharField(max_length=200)
@@ -68,4 +74,4 @@ class VisitLog(models.Model):
     )
 
     def __str__(self):
-        return f"{self.visitor.full_name} recorded by {self.user.username}"
+        return f"{self.visitor.full_name} - {self.department.department_name}"

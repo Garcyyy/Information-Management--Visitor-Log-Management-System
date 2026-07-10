@@ -8,15 +8,26 @@
 
 <body>
 
+{% if messages %}
+<div class="message-container">
+    {% for message in messages %}
+        <div class="popup {{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 <div class="dashboard-layout">
 
     <aside class="sidebar">
         <h2>Visitor Log</h2>
+
         <a href="/dashboard/">Dashboard</a>
         <a href="/visitors/">Visitors</a>
         <a href="/departments/">Departments</a>
         <a href="/persons/">Persons</a>
-        <a class="active" href="/visit-logs/">Visit Logs</a>
+        <a href="/visit-logs/" class="active">Visit Logs</a>
         <a href="/logout/">Logout</a>
     </aside>
 
@@ -43,6 +54,7 @@
                         <th>Check Out</th>
                         <th>Status</th>
                         <th>Recorded By</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
 
@@ -55,12 +67,26 @@
                         <td>{{ log.visit_date }}</td>
                         <td>{{ log.check_in_time }}</td>
                         <td>{{ log.check_out_time|default:"-" }}</td>
-                        <td>{{ log.status }}</td>
+                        <td>
+                            <span class="status {{ log.status|lower }}">
+                                {{ log.status }}
+                            </span>
+                        </td>
                         <td>{{ log.user.username }}</td>
+                        <td>
+                            <a href="{% url 'edit_visitlog' log.id %}" class="edit">Edit</a>
+
+                            <form method="POST" action="{% url 'delete_visitlog' log.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="delete" onclick="return confirm('Delete this visit log?');">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="8">No visit logs found.</td>
+                        <td colspan="9">No visit logs found.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -70,6 +96,20 @@
     </main>
 
 </div>
+
+<script>
+    setTimeout(function () {
+        let popups = document.querySelectorAll(".popup");
+
+        popups.forEach(function (popup) {
+            popup.style.opacity = "0";
+
+            setTimeout(function () {
+                popup.remove();
+            }, 500);
+        });
+    }, 3000);
+</script>
 
 </body>
 </html>
