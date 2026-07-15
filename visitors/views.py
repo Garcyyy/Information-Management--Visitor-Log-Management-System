@@ -220,7 +220,7 @@ def checkout_visitlog(request, log_id):
             messages.error(request, "This visitor has already checked out.")
         else:
             log.status = "Exited"
-            log.check_out_time = timezone.localtime().time()
+            log.check_out_time = timezone.localtime(timezone.now()).time()
             log.save()
 
             messages.success(request, "Visitor checked out successfully.")

@@ -1,12 +1,33 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+
+def current_date():
+    return timezone.localtime(timezone.now()).date()
+
+
+def current_time():
+    return timezone.localtime(timezone.now()).time()
 
 
 class Visitor(models.Model):
     full_name = models.CharField(max_length=100)
-    contact_number = models.CharField(max_length=20)
-    email = models.EmailField(blank=True, null=True)
-    address = models.TextField(blank=True, null=True)
+
+    contact_number = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True
+    )
+
+    email = models.EmailField(
+        blank=True,
+        null=True
+    )
+
+    address = models.TextField(
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return self.full_name
@@ -68,8 +89,8 @@ class VisitLog(models.Model):
     )
 
     purpose = models.CharField(max_length=200)
-    visit_date = models.DateField(auto_now_add=True)
-    check_in_time = models.TimeField(auto_now_add=True)
+    visit_date = models.DateField(default=current_date)
+    check_in_time = models.TimeField(default=current_time)
     check_out_time = models.TimeField(blank=True, null=True)
 
     status = models.CharField(
