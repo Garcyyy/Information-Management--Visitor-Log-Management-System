@@ -19,6 +19,7 @@ urlpatterns = [
 
     path("visit-logs/", views.visitlog_list, name="visitlog_list"),
     path("visit-logs/add/", views.add_visitlog, name="add_visitlog"),
+    path("visit-logs/checkout/<int:log_id>/", views.checkout_visitlog, name="checkout_visitlog"),
     path("visit-logs/edit/<int:log_id>/", views.edit_visitlog, name="edit_visitlog"),
     path("visit-logs/delete/<int:log_id>/", views.delete_visitlog, name="delete_visitlog"),
 ]

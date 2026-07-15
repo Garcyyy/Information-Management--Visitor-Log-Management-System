@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils import timezone
 
 from .models import Visitor, Department, PersonToVisit, VisitLog
 from .forms import VisitorForm, DepartmentForm, PersonToVisitForm, VisitLogForm
@@ -207,6 +208,26 @@ def delete_person(request, person_id):
 # =========================
 # VISIT LOG VIEWS
 # =========================
+
+@login_required(login_url="login")
+def checkout_visitlog(request, log_id):
+    log = get_object_or_404(VisitLog, id=log_id)
+
+    if request.method == "POST":
+        next_url = request.POST.get("next") or "visitlog_list"
+
+        if log.status == "Exited":
+            messages.error(request, "This visitor has already checked out.")
+        else:
+            log.status = "Exited"
+            log.check_out_time = timezone.localtime().time()
+            log.save()
+
+            messages.success(request, "Visitor checked out successfully.")
+
+        return redirect(next_url)
+
+    return redirect("visitlog_list")
 
 @login_required(login_url="login")
 def visitlog_list(request):

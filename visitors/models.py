@@ -41,24 +41,29 @@ class VisitLog(models.Model):
         ("Exited", "Exited"),
     )
 
-    # Staff/user who recorded the visit log
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="visit_logs"
     )
 
-    # Visitor being recorded
     visitor = models.ForeignKey(
         Visitor,
         on_delete=models.CASCADE,
         related_name="visit_logs"
     )
 
-    # ForeignKey allows the same department to be used in many visit logs
     department = models.ForeignKey(
         Department,
         on_delete=models.CASCADE,
+        related_name="visit_logs"
+    )
+
+    person_to_visit = models.ForeignKey(
+        PersonToVisit,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
         related_name="visit_logs"
     )
 
