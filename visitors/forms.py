@@ -38,7 +38,32 @@ class VisitLogForm(forms.ModelForm):
         fields = [
             "visitor",
             "department",
+            "person_to_visit",
             "purpose",
-            "check_out_time",
-            "status",
         ]
+
+        widgets = {
+            "purpose": forms.TextInput(attrs={
+                "placeholder": "Example: Payment, meeting, inquiry, delivery"
+            }),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        visitor = cleaned_data.get("visitor")
+
+        if visitor:
+            existing_log = VisitLog.objects.filter(
+                visitor=visitor,
+                status="Inside"
+            )
+
+            if self.instance and self.instance.pk:
+                existing_log = existing_log.exclude(pk=self.instance.pk)
+
+            if existing_log.exists():
+                raise forms.ValidationError(
+                    "This visitor is already checked in and has not checked out yet."
+                )
+
+        return cleaned_data
