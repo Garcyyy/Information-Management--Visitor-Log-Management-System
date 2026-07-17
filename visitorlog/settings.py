@@ -27,7 +27,17 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = [h.strip() for h in os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",") if h.strip]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "visitor-log-management-system-im2.onrender.com",
+    ".onrender.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://visitor-log-management-system-im2.onrender.com",
+    "https://*.onrender.com",
+]
 
 
 
